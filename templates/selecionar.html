@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Selecionar Itens</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+
+            /* 🔥 fundo cinza leve */
+            background: #f2f2f2;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px 10px;
+            margin: 0;
+            color: #333;
+        }
+
+        .lista {
+            padding: 10px;
+            margin-bottom: 90px;
+        }
+
+        .item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+
+            /* 🔥 sombra leve moderna */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.5);
+            margin-top: 5px;
+        }
+
+        .info {
+            flex: 1;
+        }
+
+        .codigo {
+            font-weight: bold;
+            color: #d60000;
+        }
+
+        .btn-container {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+
+            background: white;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            background: #d60000;
+            color: white;
+            border: none;
+            border-radius: 10px;
+
+            transition: 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.97);
+            background: #b80000;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Selecionar Itens</h2>
+
+<form method="POST">
+
+    <div class="lista">
+        {% for item in itens %}
+        <label class="item">
+            <input type="checkbox" name="sel_{{loop.index0}}">
+
+            <div class="info">
+                <div class="codigo">{{item.codigo}}</div>
+                <div>{{item.descricao}}</div>
+                <div><small>End: {{item.endereco or "-"}}</small></div>
+                <div><small>Un: {{item.unidade or "-"}}</small></div>
+                <div><strong>Qtd: {{item.quantidade}}</strong></div>
+            </div>
+        </label>
+        {% endfor %}
+    </div>
+
+    <div class="btn-container">
+        <button type="submit">Iniciar Auditoria</button>
+    </div>
+
+</form>
+
+</body>
+</html>

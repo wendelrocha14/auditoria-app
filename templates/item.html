@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Auditoria de Estoque</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        input[type="text"] {
+            width: 80px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .ok {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Auditoria de Estoque</h1>
+
+<form method="POST">
+    <table>
+        <tr>
+            <th>Selecionar</th>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Endereço</th>
+            <th>Unidade</th>
+            <th>Quantidade</th>
+        </tr>
+
+        {% for item in itens %}
+        <tr>
+            <td class="ok">
+                <input type="checkbox" name="selecionado" value="{{loop.index0}}">
+            </td>
+            <td>{{item.codigo}}</td>
+            <td>{{item.descricao}}</td>
+            <td>{{item.endereco or "-"}}</td>
+            <td>{{item.unidade or "-"}}</td>
+            <td>{{item.quantidade}}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <button class="btn" type="submit">Ir para Auditoria</button>
+</form>
+
+</body>
+</html>

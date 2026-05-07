@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Auditoria</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f5f5f5;
+            padding-bottom: 90px;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            margin: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .progresso {
+            text-align: center;
+            background: white;
+            padding-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+            transition: 0.2s;
+        }
+
+        .card-ok {
+            background: #d1e7dd;
+        }
+
+        .card-divergente {
+            background: #f8d7da;
+        }
+
+        .codigo {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .info {
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 10px;
+
+            border: 1px solid #ccc;
+            border-radius: 8px;
+
+            box-sizing: border-box;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-ok,
+        .btn-erro {
+            flex: 1;
+
+            border: none;
+
+            color: white;
+
+            padding: 15px;
+
+            font-size: 16px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .btn-ok {
+            background: #198754;
+        }
+
+        .btn-erro {
+            background: #dc3545;
+        }
+
+        .ativo-ok {
+            background: #0f5132 !important;
+        }
+
+        .ativo-erro {
+            background: #842029 !important;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+
+            background: white;
+
+            padding: 10px;
+
+            box-sizing: border-box;
+
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-finalizar {
+            width: 100%;
+
+            padding: 15px;
+
+            background: #0d6efd;
+
+            color: white;
+
+            border: none;
+
+            font-size: 16px;
+
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Auditoria</h2>
+
+<div class="progresso">
+    <span id="contador">0</span> / {{ itens|length }} auditados
+</div>
+
+<form method="POST" id="formAuditoria">
+
+    {% for item in itens %}
+
+    <div class="card" id="card_{{loop.index0}}">
+
+        <div class="codigo">
+            {{item.codigo}}
+        </div>
+
+        <div class="info">
+            {{item.descricao}}
+        </div>
+
+        <div class="info">
+            End: {{item.endereco or "-"}}
+        </div>
+
+        <div class="info">
+            Un: {{item.unidade or "-"}}
+        </div>
+
+        <div class="info">
+            <strong>
+                Qtd Sistema: {{item.quantidade}}
+            </strong>
+        </div>
+
+        <!-- status -->
+        <input
+            type="hidden"
+            name="status_{{loop.index0}}"
+            id="status_{{loop.index0}}"
+        >
+
+        <!-- quantidade -->
+        <input
+            type="text"
+            name="qtd_{{loop.index0}}"
+            id="qtd_{{loop.index0}}"
+            placeholder="Quantidade física"
+            onkeydown="evitarEnter(event)"
+        >
+
+        <div class="acoes">
+
+            <button
+                type="button"
+                class="btn-ok"
+                id="btn_ok_{{loop.index0}}"
+                onclick="marcarOk('{{loop.index0}}', '{{item.quantidade}}')"
+            >
+                OK
+            </button>
+
+            <button
+                type="button"
+                class="btn-erro"
+                id="btn_erro_{{loop.index0}}"
+                onclick="marcarDivergente('{{loop.index0}}')"
+            >
+                Divergente
+            </button>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+    <div class="footer">
+
+        <button type="submit" class="btn-finalizar">
+            Finalizar Auditoria
+        </button>
+
+    </div>
+
+</form>
+
+<script>
+
+    // impede ENTER
+    function evitarEnter(event) {
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+        }
+    }
+
+    // atualiza contador
+    function atualizarContador() {
+
+        const total = {{ itens|length }};
+
+        let auditados = 0;
+
+        for (let i = 0; i < total; i++) {
+
+            const status = document.getElementById("status_" + i).value;
+
+            if (status !== "") {
+                auditados++;
+            }
+        }
+
+        document.getElementById("contador").innerText = auditados;
+    }
+
+    // botão OK
+    function marcarOk(index, quantidadeSistema) {
+
+        const campoQtd = document.getElementById("qtd_" + index);
+
+        campoQtd.value = quantidadeSistema;
+
+        document.getElementById("status_" + index).value = "ok";
+
+        document
+            .getElementById("btn_ok_" + index)
+            .classList.add("ativo-ok");
+
+        document
+            .getElementById("btn_erro_" + index)
+            .classList.remove("ativo-erro");
+
+        // muda cor card
+        const card = document.getElementById("card_" + index);
+
+        card.classList.add("card-ok");
+
+        card.classList.remove("card-divergente");
+
+        atualizarContador();
+    }
+
+    // botão divergente
+    function marcarDivergente(index) {
+
+        document.getElementById("status_" + index).value = "divergente";
+
+        document
+            .getElementById("btn_erro_" + index)
+            .classList.add("ativo-erro");
+
+        document
+            .getElementById("btn_ok_" + index)
+            .classList.remove("ativo-ok");
+
+        // muda cor card
+        const card = document.getElementById("card_" + index);
+
+        card.classList.add("card-divergente");
+
+        card.classList.remove("card-ok");
+
+        atualizarContador();
+    }
+
+    // bloquear finalizar incompleto
+    document
+        .getElementById("formAuditoria")
+        .addEventListener("submit", function(event) {
+
+        const total = {{ itens|length }};
+
+        let faltando = false;
+
+        for (let i = 0; i < total; i++) {
+
+            const status = document
+                .getElementById("status_" + i)
+                .value;
+
+            if (status === "") {
+
+                faltando = true;
+
+                break;
+            }
+        }
+
+        if (faltando) {
+
+            event.preventDefault();
+
+            alert("Existem itens não auditados.");
+        }
+    });
+
+</script>
+
+</body>
+</html>

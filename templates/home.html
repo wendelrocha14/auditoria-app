@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Auditoria</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- PWA -->
+    <link
+        rel="manifest"
+        href="{{ url_for('static', filename='manifest.json') }}"
+    >
+
+    <!-- Cor do app -->
+    <meta name="theme-color" content="#d60000">
+
+    <!-- iPhone / iOS -->
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Auditoria"
+    >
+
+    <!-- Ícone iPhone -->
+    <link
+        rel="apple-touch-icon"
+        href="{{ url_for('static', filename='imagens/icon-192.png') }}"
+    >
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+        }
+
+        .container {
+
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card {
+
+            width: 100%;
+            max-width: 350px;
+
+            padding: 30px 20px;
+
+            border-radius: 20px;
+
+            background: linear-gradient(
+                to bottom,
+                #ff4d4d,
+                #ffb3b3,
+                #ffffff
+            );
+
+            text-align: center;
+
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+            animation: aparecer 0.4s ease;
+        }
+
+        @keyframes aparecer {
+
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+
+            width: 120px;
+
+            margin-bottom: 20px;
+        }
+
+        h2 {
+
+            margin-bottom: 30px;
+
+            color: #333;
+
+            font-size: 20px;
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 15px;
+
+            font-size: 16px;
+
+            background: #d60000;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        button:hover {
+
+            background: #b80000;
+        }
+
+        button:active {
+
+            transform: scale(0.97);
+        }
+
+        a {
+
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <img
+            src="{{ url_for('static', filename='imagens/img.png') }}"
+            class="logo"
+        >
+
+        <h2>Bem-vindo à Auditoria</h2>
+
+        <a href="/iniciar_auditoria">
+
+            <button>
+                Iniciar Auditoria
+            </button>
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- PWA -->
+<script>
+
+if ('serviceWorker' in navigator) {
+
+    navigator.serviceWorker.register(
+        "{{ url_for('static', filename='service-worker.js') }}"
+    )
+
+    .then(() => {
+
+        console.log('Service Worker registrado com sucesso.');
+
+    })
+
+    .catch((error) => {
+
+        console.log(
+            'Erro ao registrar Service Worker:',
+            error
+        );
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>
