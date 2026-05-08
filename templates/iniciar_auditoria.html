@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
-
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -15,207 +14,117 @@
         }
 
         .container {
-
             min-height: 100vh;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             padding: 15px;
-
             box-sizing: border-box;
         }
 
         .card {
-
             width: 100%;
             max-width: 320px;
-
             padding: 22px 18px;
-
             border-radius: 20px;
-
-            background: linear-gradient(
-                to bottom,
-                #ff4d4d,
-                #ffb3b3,
-                #ffffff
-            );
-
+            background: linear-gradient(to bottom, #ff4d4d, #ffb3b3, #ffffff);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-
             animation: aparecer 0.4s ease;
         }
 
         @keyframes aparecer {
-
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .logo {
-
             width: 90px;
-
             display: block;
-
             margin: 0 auto 15px auto;
         }
 
         h2 {
-
             text-align: center;
-
             margin-bottom: 22px;
-
             color: #333;
-
             font-size: 20px;
         }
 
         .form-auditoria {
-
             display: flex;
-
             flex-direction: column;
-
             width: 100%;
         }
 
         .form-auditoria label {
-
             margin-bottom: 5px;
-
             font-size: 13px;
-
             font-weight: bold;
-
             color: #333;
+            text-align: left;
         }
 
+        /* AJUSTE DOS BALÕES PARA FICAREM IGUAIS */
         .form-auditoria input {
-
             width: 100%;
-
-            padding: 10px;
-
+            height: 45px;            /* Altura fixa para todos */
+            padding: 0 12px;         /* Espaço interno nas laterais */
             margin-bottom: 14px;
-
             border: 1px solid #ccc;
-
             border-radius: 10px;
-
             font-size: 14px;
-
-            box-sizing: border-box;
-
+            box-sizing: border-box;  /* Mantém o tamanho real fixo */
             background: white;
+            display: block;
+            -webkit-appearance: none; /* Remove estilos estranhos do iPhone */
         }
 
         .form-auditoria button {
-
             width: 100%;
-
             padding: 13px;
-
             font-size: 15px;
-
             background: #d60000;
-
             color: white;
-
             border: none;
-
             border-radius: 10px;
-
             cursor: pointer;
-
             transition: 0.2s;
+            margin-top: 5px;
         }
 
-        .form-auditoria button:hover {
-
-            background: #b80000;
-        }
-
-        .form-auditoria button:active {
-
-            transform: scale(0.97);
-        }
+        .form-auditoria button:hover { background: #b80000; }
+        .form-auditoria button:active { transform: scale(0.97); }
 
     </style>
 </head>
 <body>
 
 <div class="container">
-
     <div class="card">
-
-        <img
-            src="{{ url_for('static', filename='imagens/img.png') }}"
-            class="logo"
-        >
-
+        <img src="{{ url_for('static', filename='imagens/img.png') }}" class="logo">
         <h2>Iniciar Auditoria</h2>
 
         <form method="POST" class="form-auditoria">
 
             <label>Data</label>
-            <input
-                type="date"
-                name="data"
-                required
-            >
+            <input type="date" name="data" required>
 
             <label>Hora início</label>
-            <input
-                type="time"
-                name="hora_inicio"
-                required
-            >
+            <input type="time" name="hora_inicio" required>
 
             <label>Grupo</label>
-            <input
-                type="text"
-                name="grupo"
-                placeholder="Ex: Couro"
-                required
-            >
+            <input type="text" name="grupo" placeholder="Ex: Couro" required>
 
             <label>Empresa</label>
-            <input
-                type="text"
-                name="empresa"
-                placeholder="Ex: Nova Hatz, Bahia"
-                required
-            >
+            <input type="text" name="empresa" placeholder="Ex: Nova Hartz, Bahia" required>
 
             <label>ID Auditoria</label>
-            <input
-                type="text"
-                name="id"
-                placeholder="Ex: 001"
-                required
-            >
+            <input type="text" name="id" placeholder="Ex: 001" required>
 
-            <button type="submit">
-                Iniciar
-            </button>
+            <button type="submit">Iniciar</button>
 
         </form>
-
     </div>
-
 </div>
 
 </body>
