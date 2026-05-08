@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, send_file
+
 from teste_auditi import obter_itens
 from datetime import datetime
 from openpyxl import Workbook
@@ -282,13 +283,15 @@ def auditoria():
             ws.column_dimensions[coluna].width = largura
 
         # salva excel
+          # salva excel
         nome_xlsx = f"auditorias/auditoria_{id_auditoria}.xlsx"
 
         wb.save(nome_xlsx)
 
         print(f"\nXLSX salvo em: {nome_xlsx}")
 
-        return redirect("/")
+        # AGORA FICOU ASSIM:
+        return send_file(nome_xlsx, as_attachment=True)
 
     return render_template(
         "auditoria.html",
