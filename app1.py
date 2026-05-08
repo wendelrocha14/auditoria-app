@@ -54,12 +54,16 @@ def selecionar():
     return render_template("selecionar.html", itens=itens)
 
 # 🔴 AUDITORIA E DOWNLOAD DO CSV
+# 🔴 AUDITORIA E DOWNLOAD DO CSV
 @app.route("/auditoria", methods=["GET", "POST"])
 def auditoria():
     itens = session.get("itens_selecionados", [])
     dados = session.get("dados_auditoria", {})
 
     if request.method == "POST":
+        # Pega a hora de fim que você digitou na tela
+        hora_fim_digitada = request.form.get("hora_fim")
+        
         resultado = []
         for i, item in enumerate(itens):
             qtd_real = request.form.get(f"qtd_{i}") or item["quantidade"]
@@ -71,26 +75,13 @@ def auditoria():
                 "qtd_real": qtd_real
             })
 
-        # Registra a hora exata do término
-        hora_fim = datetime.now().strftime("%H:%M")
-        
-        # Nome do arquivo CSV baseado no ID que você preencheu
         nome_csv = f"auditoria_{dados.get('id', 'sem_id')}.csv"
         caminho_csv = os.path.join(BASE_DIR, nome_csv)
 
-        # GERAR O ARQUIVO CSV COM OS CABEÇALHOS CORRETOS
         with open(caminho_csv, mode="w", newline="", encoding="utf-8-sig") as arquivo:
-            # Separador ";" para o Excel abrir direto e certinho
             writer = csv.writer(arquivo, delimiter=";")
+            writer.writerow(["Data", "Grupo", "Emp", "Código", "Material", "Un. Medida", "Estoque", "Físico", "idAudit", "hora inicio", "hora fim"])
             
-            # Cabeçalho solicitado
-            writer.writerow([
-                "Data", "Grupo", "Emp", "Código", "Material", 
-                "Un. Medida", "Estoque", "Físico", "idAudit", 
-                "hora inicio", "hora fim"
-            ])
-            
-            # Escreve as linhas pegando os dados que você preencheu no app
             for r in resultado:
                 writer.writerow([
                     dados.get("data"),
@@ -103,13 +94,13 @@ def auditoria():
                     r["qtd_real"],
                     dados.get("id"),
                     dados.get("hora_inicio"),
-                    hora_fim
+                    hora_fim_digitada  # Agora usa a hora que você preencheu
                 ])
 
-        # FAZ O DOWNLOAD DO CSV NO SEU CELULAR
         return send_file(caminho_csv, as_attachment=True)
 
     return render_template("auditoria.html", itens=itens, dados=dados)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
