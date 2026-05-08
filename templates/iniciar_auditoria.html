@@ -64,19 +64,30 @@
             text-align: left;
         }
 
-        /* AJUSTE DOS BALÕES PARA FICAREM IGUAIS */
+        /* AJUSTE DOS BALÕES COM COR PRETA NAS LETRAS */
         .form-auditoria input {
             width: 100%;
-            height: 45px;            /* Altura fixa para todos */
-            padding: 0 12px;         /* Espaço interno nas laterais */
+            height: 45px;
+            padding: 0 12px;
             margin-bottom: 14px;
             border: 1px solid #ccc;
             border-radius: 10px;
             font-size: 14px;
-            box-sizing: border-box;  /* Mantém o tamanho real fixo */
+            box-sizing: border-box;
             background: white;
             display: block;
-            -webkit-appearance: none; /* Remove estilos estranhos do iPhone */
+            
+            /* FORÇA A COR PRETA */
+            color: #000000 !important; 
+            
+            /* Remove estilos padrão que podem causar o azul no mobile */
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        /* Ajuste específico para garantir preto em campos de data/hora no iOS */
+        input::-webkit-date-and-time-value {
+            color: #000000 !important;
         }
 
         .form-auditoria button {
